@@ -7,9 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   plugins: [createLogger()],
   state: {
-    startPoint: null,
     shiftKey: false,
     commandKey: false,
+    paperPosition: null,
     graphs: [{
       id: uuid.v4(),
       type: 'circle',
@@ -60,6 +60,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_PAPER_POSITION (state, position) {
+      state.paperPosition = position
+    },
     PRESS_SHIFT_KEY (state) {
       state.shiftKey = true
     },
@@ -72,54 +75,56 @@ export default new Vuex.Store({
     RELEASE_COMMAND_KEY (state) {
       state.commandKey = false
     },
-    START_DRAG_GRAPH (state, data) {
-      data.graph.dragging = true
-      data.graph.startPoint = data.position
+    START_DRAG_GRAPH (state, config) {
+      let { graph, event } = config
+
+      console.log('target')
+      graph.startOffset = {
+        x: event.clientX - graph.position.x - state.paperPosition.x,
+        y: event.clientY - graph.position.y - state.paperPosition.y
+      }
+      console.log('graph', event.clientX - event.target.offsetLeft - state.paperPosition.x)
+      graph.dragging = true
     },
     STOP_DRAG_ALL (state) {
       state.graphs.forEach((g) => {
         g.dragging = false
-        g.startPoint = null
+        g.startOffset = null
       })
     },
     STOP_DRAG_GRAPH (state, graph) {
       graph.dragging = false
-      graph.startPoint = null
+      graph.startOffset = null
     },
-    SELECT_GRAPH (state, id) {
-      let target = state.graphs.filter(g => g.id === id)[0]
-      target && (target.selected = true)
+    SELECT_GRAPH (state, graph) {
+      graph && (graph.selected = true)
     },
-    UNSELECT_GRAPH (state, id) {
-      let target = state.graphs.filter(g => g.id === id)[0]
-      target && (target.selected = false)
+    UNSELECT_GRAPH (state, graph) {
+      graph && (graph.selected = false)
     },
     UNSELECT_ALL (state, id) {
       state.graphs.forEach((g) => {
         g.selected = false
       })
     },
-    SET_START_POINT (state, point) {
-      state.startPoint = point
-    },
-    MOVE_GRAPH (state, graph) {
-      if (!state.startPoint) { return }
-      let target = state.graphs.filter(g => g.id === graph.id)[0]
-
-      target.position = {
-        x: target.position.x + (graph.position.x - state.startPoint.x),
-        y: target.position.y + (graph.position.y - state.startPoint.y)
+    MOVE_GRAPH (state, config) {
+      let { graph, position } = config
+      graph.position = {
+        x: position.x - state.paperPosition.x - graph.startOffset.x,
+        y: position.y - state.paperPosition.y - graph.startOffset.y
       }
-      console.log('delta', (graph.position.x - state.startPoint.x), (graph.position.y - state.startPoint.y))
     },
     ADD_GRAPH (state, graph) {
       state.graphs.push(graph)
     }
   },
   actions: {
+    setPaperPosition ({ commit }, position) {
+      commit('SET_PAPER_POSITION', position)
+    },
     /* drag */
-    startDrag ({ commit }, data) {
-      commit('START_DRAG_GRAPH', data)
+    startDrag ({ commit }, config) {
+      commit('START_DRAG_GRAPH', config)
     },
     stopDrag ({ commit }, graph) {
       commit('STOP_DRAG_GRAPH', graph)
@@ -140,6 +145,13 @@ export default new Vuex.Store({
     unselectGraph ({ commit }, graph) {
       commit('UNSELECT_GRAPH', graph)
     },
+    toggleGraph ({ commit, state }, graph) {
+      if (graph.selected) {
+        commit('UNSELECT_GRAPH', graph)
+      } else {
+        commit('SELECT_GRAPH', graph)
+      }
+    },
     unselectAll ({ commit }) {
       commit('UNSELECT_ALL')
     },
@@ -147,19 +159,27 @@ export default new Vuex.Store({
     moveDraggingGraphs ({ commit, state }, point) {
       state.graphs.filter(g => g.dragging)
         .forEach((g) => {
-          console.log('move position', point)
           commit('MOVE_GRAPH', {
             graph: g,
             position: point
           })
         })
     },
-    setStartPoint ({ commit }, point) {
-      console.log('point', point)
-      commit('SET_START_POINT', point)
-    },
     addGraph ({ commit }, graph) {
       commit('ADD_GRAPH', graph)
+    },
+    /* meta keys */
+    pressCommandKey ({ commit }) {
+      commit('PRESS_COMMAND_KEY')
+    },
+    releaseCommandKey ({ commit }) {
+      commit('RELEASE_COMMAND_KEY')
+    },
+    pressShiftKey ({ commit }) {
+      commit('PRESS_SHIFT_KEY')
+    },
+    releaseShiftKey ({ commit }) {
+      commit('RELEASE_SHIFT_KEY')
     }
   }
 })

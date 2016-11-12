@@ -2,6 +2,7 @@
 #app
   toolbar
   paper
+  .dragging {{dragging}}
   .selected {{selected}}
 </template>
 
@@ -18,6 +19,12 @@ export default {
     Paper
   },
   computed: {
+    dragging () {
+      return this.$store.getters
+        .draggingGraphs
+        .map(g => g.id)
+        .join(',')
+    },
     selected () {
       return this.$store.getters
         .selectedGraphs
@@ -35,7 +42,7 @@ export default {
 
   #app{
     overflow: hidden;
-    .selected{
+    .selected, .dragging{
       clear: both;
     }
   }

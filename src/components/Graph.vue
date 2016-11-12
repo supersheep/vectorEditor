@@ -4,7 +4,7 @@
     :data='graph.data',
     :position='graph.position',
     :selected='graph.selected',
-    @click='select',
+    @click.native='select',
     @mousedown.native.prevent='mousedown',
     @mouseup.native='mouseup')
 </template>
@@ -25,18 +25,20 @@ export default {
   methods: {
     mousedown (e) {
       this.$store.dispatch('startDrag', {
-        graph: this.graph,
-        position: {
-          x: e.clientX,
-          y: e.clientY
-        }
+        event: e,
+        graph: this.graph
       })
     },
     mouseup (e) {
       this.$store.dispatch('stopDragAll')
     },
     select () {
-      this.$store.dispatch('selectGraph', this.graph)
+      if (this.$store.state.commandKey) {
+        this.$store.dispatch('toggleGraph', this.graph)
+      } else {
+        console.log('selectGraph')
+        this.$store.dispatch('selectGraph', this.graph)
+      }
     }
   }
 }

@@ -1,5 +1,7 @@
 <template lang="jade">
-.paper(@mousemove='mousemove',@mouseup='mouseup')
+.paper(
+    @mousemove='mousemove',
+    @mouseup='mouseup')
   graph(v-for='graph in graphs', :graph='graph')
 </template>
 
@@ -9,6 +11,29 @@ export default {
   components: {
     Graph
   },
+  mounted () {
+    let { dispatch } = this.$store
+    dispatch('setPaperPosition', {
+      x: this.$el.offsetLeft,
+      y: this.$el.offsetTop
+    })
+    window.addEventListener('keydown', (e) => {
+      if (e.shiftKey) {
+        dispatch('pressShiftKey')
+      }
+      if (e.metaKey) {
+        dispatch('pressCommandKey')
+      }
+    })
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Shift') {
+        dispatch('releaseShiftKey')
+      }
+      if (e.key === 'Meta') {
+        dispatch('releaseCommandKey')
+      }
+    })
+  },
   computed: {
     graphs () {
       return this.$store.state.graphs
@@ -16,8 +41,21 @@ export default {
   },
   methods: {
     mousemove (e) {
-      if (this.$store.getters.draggingGraphs.length) {
-        console.log('paper mousemove', this.$store.getters.draggingGraphs.length)
+      let { draggingGraphs, selectedGraphs } = this.$store.getters
+      if (draggingGraphs.length) {
+        if (selectedGraphs.length > draggingGraphs.length) {
+          selectedGraphs.forEach((g) => {
+            this.$store.dispatch('startDrag', {
+              graph: g,
+              event: e
+            })
+          })
+        } else {
+          this.$store.dispatch('moveDraggingGraphs', {
+            x: e.clientX,
+            y: e.clientY
+          })
+        }
       }
     },
     mouseup () {
@@ -29,6 +67,7 @@ export default {
 
 <style lang="less">
 .paper{
+  overflow: hidden;
   width: 500px;
   height: 400px;
   background-color: #fff;
