@@ -1,6 +1,6 @@
 <template lang="jade">
   svg.rect-graph(:width='width',:height='height',:style='style')
-    rect(:width='width',:height='height')
+    rect(:width='width',:height='height',:style='rectStyle')
 </template>
 
 <script>
@@ -13,6 +13,12 @@ export default {
       return {
         left: this.position.x + 'px',
         top: this.position.y + 'px'
+      }
+    },
+    rectStyle () {
+      return {
+        fill: this.data.fillColor,
+        opacity: this.data.opacity
       }
     },
     width () {

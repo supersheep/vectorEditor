@@ -2,6 +2,7 @@
 #app
   toolbar
   paper
+  setting
   .dragging {{dragging}}
   .selected {{selected}}
 </template>
@@ -9,6 +10,7 @@
 <script>
 import Toolbar from './components/Toolbar'
 import Paper from './components/Paper'
+import Setting from './components/Setting'
 import store from './store'
 
 export default {
@@ -16,6 +18,7 @@ export default {
   name: 'app',
   components: {
     Toolbar,
+    Setting,
     Paper
   },
   computed: {

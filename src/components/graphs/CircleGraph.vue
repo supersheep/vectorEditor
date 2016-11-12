@@ -1,6 +1,6 @@
 <template lang="jade">
   svg.circle-graph(:width='radius * 2',:height='radius * 2',:style='style')
-    circle(:cx="radius",:cy="radius",:r="radius")
+    circle(:cx="radius",:cy="radius",:r="radius",:style='circleStyle')
 </template>
 
 <script>
@@ -12,6 +12,12 @@ export default {
       return {
         left: this.position.x + 'px',
         top: this.position.y + 'px'
+      }
+    },
+    circleStyle () {
+      return {
+        fill: this.data.fillColor,
+        opacity: this.data.opacity
       }
     },
     radius () {

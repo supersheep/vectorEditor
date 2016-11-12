@@ -12,8 +12,24 @@ export default new Vuex.Store({
     paperPosition: null,
     graphs: [{
       id: uuid.v4(),
+      type: 'image',
+      position: {
+        x: 20,
+        y: 20
+      },
+      selected: false,
+      dragging: false,
+      data: {
+        width: 200,
+        height: 200,
+        url: 'http://ww1.sinaimg.cn/mw690/6620fb47gw1f9imdg5baij20np0hswh9.jpg'
+      }
+    }, {
+      id: uuid.v4(),
       type: 'circle',
       data: {
+        opacity: 0.6,
+        fillColor: 'rgb(93, 235, 120)',
         radius: 30
       },
       selected: false,
@@ -26,6 +42,8 @@ export default new Vuex.Store({
       id: uuid.v4(),
       type: 'rect',
       data: {
+        opacity: 0.6,
+        fillColor: 'rgb(235, 93, 174)',
         width: 200,
         height: 100
       },
@@ -34,20 +52,6 @@ export default new Vuex.Store({
       position: {
         x: 50,
         y: 50
-      }
-    }, {
-      id: uuid.v4(),
-      type: 'image',
-      position: {
-        x: 20,
-        y: 20
-      },
-      selected: false,
-      dragging: false,
-      data: {
-        width: 200,
-        height: 200,
-        url: 'http://ww1.sinaimg.cn/mw690/6620fb47gw1f9imdg5baij20np0hswh9.jpg'
       }
     }]
   },
@@ -83,7 +87,6 @@ export default new Vuex.Store({
         x: event.clientX - graph.position.x - state.paperPosition.x,
         y: event.clientY - graph.position.y - state.paperPosition.y
       }
-      console.log('graph', event.clientX - event.target.offsetLeft - state.paperPosition.x)
       graph.dragging = true
     },
     STOP_DRAG_ALL (state) {
