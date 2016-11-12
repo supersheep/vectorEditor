@@ -1,5 +1,6 @@
 <template lang="jade">
 .paper(
+    @click='paperClick',
     @mousemove='mousemove',
     @mouseup='mouseup')
   graph(v-for='graph in graphs', :graph='graph')
@@ -24,6 +25,9 @@ export default {
       if (e.metaKey) {
         dispatch('pressCommandKey')
       }
+      if (e.key === 'Backspace') {
+        dispatch('deleteSelected')
+      }
     })
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Shift') {
@@ -40,6 +44,11 @@ export default {
     }
   },
   methods: {
+    paperClick (e) {
+      if (e.target === this.$el) {
+        this.$store.dispatch('unselectAll')
+      }
+    },
     mousemove (e) {
       let { draggingGraphs, selectedGraphs } = this.$store.getters
       if (draggingGraphs.length) {

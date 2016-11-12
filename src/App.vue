@@ -3,8 +3,8 @@
   toolbar
   paper
   setting
-  .dragging {{dragging}}
-  .selected {{selected}}
+  .dragging dragging:{{dragging}}
+  .selected selected:{{selected}}
 </template>
 
 <script>
@@ -25,13 +25,13 @@ export default {
     dragging () {
       return this.$store.getters
         .draggingGraphs
-        .map(g => g.id)
+        .map(g => g.type)
         .join(',')
     },
     selected () {
       return this.$store.getters
         .selectedGraphs
-        .map(g => g.id)
+        .map(g => g.type)
         .join(',')
     }
   }

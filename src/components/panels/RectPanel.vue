@@ -12,9 +12,6 @@
 export default {
   props: {
     graph: Object
-  },
-  mounted () {
-    console.log('graph', this.graph)
   }
 }
 </script>

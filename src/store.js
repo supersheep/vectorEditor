@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import uuid from 'node-uuid'
 import createLogger from 'vuex/dist/logger'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -10,6 +11,7 @@ export default new Vuex.Store({
     shiftKey: false,
     commandKey: false,
     paperPosition: null,
+    moving: false,
     graphs: [{
       id: uuid.v4(),
       type: 'image',
@@ -64,6 +66,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    DELETE_SELECTED (state) {
+      state.graphs = state.graphs.filter((g) => !g.selected)
+    },
     SET_PAPER_POSITION (state, position) {
       state.paperPosition = position
     },
@@ -110,8 +115,12 @@ export default new Vuex.Store({
         g.selected = false
       })
     },
+    SET_MOVING (state, moving) {
+      state.moving = moving
+    },
     MOVE_GRAPH (state, config) {
       let { graph, position } = config
+      console.log('moveX', position.x - state.paperPosition.x - graph.startOffset.x)
       graph.position = {
         x: position.x - state.paperPosition.x - graph.startOffset.x,
         y: position.y - state.paperPosition.y - graph.startOffset.y
@@ -140,9 +149,6 @@ export default new Vuex.Store({
     },
     /* select */
     selectGraph ({ commit, state }, graph) {
-      if (!state.commandKey) {
-        commit('UNSELECT_ALL')
-      }
       commit('SELECT_GRAPH', graph)
     },
     unselectGraph ({ commit }, graph) {
@@ -159,6 +165,9 @@ export default new Vuex.Store({
       commit('UNSELECT_ALL')
     },
     /* move */
+    setMoving ({ commit }, moving) {
+      commit('SET_MOVING', moving)
+    },
     moveDraggingGraphs ({ commit, state }, point) {
       state.graphs.filter(g => g.dragging)
         .forEach((g) => {
@@ -169,7 +178,12 @@ export default new Vuex.Store({
         })
     },
     addGraph ({ commit }, graph) {
-      commit('ADD_GRAPH', graph)
+      let newGraph = _.clone(graph)
+      newGraph.id = uuid.v4()
+      commit('ADD_GRAPH', newGraph)
+      return new window.Promise((resolve) => {
+        resolve(newGraph)
+      })
     },
     /* meta keys */
     pressCommandKey ({ commit }) {
@@ -183,6 +197,9 @@ export default new Vuex.Store({
     },
     releaseShiftKey ({ commit }) {
       commit('RELEASE_SHIFT_KEY')
+    },
+    deleteSelected ({ commit }) {
+      commit('DELETE_SELECTED')
     }
   }
 })

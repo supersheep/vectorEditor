@@ -8,12 +8,14 @@
 import CirclePanel from './panels/CirclePanel'
 import RectPanel from './panels/RectPanel'
 import ImagePanel from './panels/ImagePanel'
+import GroupPanel from './panels/GroupPanel'
 
 export default {
   components: {
     CirclePanel,
     RectPanel,
-    ImagePanel
+    ImagePanel,
+    GroupPanel
   },
   computed: {
     type () {
