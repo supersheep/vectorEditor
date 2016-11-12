@@ -132,7 +132,7 @@ export default new Vuex.Store({
     },
     SELECT_BY_TYPE (state, type) {
       state.graphs.forEach((g) => {
-        if (g.type === type) {
+        if (g.data.class === type) {
           g.selected = true
         } else {
           g.selected = false
@@ -212,7 +212,9 @@ export default new Vuex.Store({
       commit('RELEASE_SHIFT_KEY')
     },
     selectSameType ({ commit }, graph) {
-      commit('SELECT_BY_TYPE', graph.type)
+      if (graph.data.class) {
+        commit('SELECT_BY_TYPE', graph.data.class)
+      }
     },
     deleteSelected ({ commit, state }) {
       if (!state.currentInput) {
