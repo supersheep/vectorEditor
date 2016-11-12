@@ -77,8 +77,8 @@ export default {
 <style lang="less">
 .paper{
   overflow: hidden;
-  width: 500px;
-  height: 400px;
+  width: 1000px;
+  height: 600px;
   background-color: #fff;
   float: left;
   position: relative;

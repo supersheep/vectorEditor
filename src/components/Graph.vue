@@ -4,6 +4,7 @@
     :data='graph.data',
     :position='graph.position',
     :selected='graph.selected',
+    @dblclick.native='selectSameType',
     @click.native='select',
     @mousedown.native.prevent='mousedown',
     @mouseup.native='mouseup')
@@ -23,10 +24,15 @@ export default {
     RectGraph
   },
   methods: {
+    selectSameType () {
+      this.$store.dispatch('selectSameType', this.graph)
+    },
     mousedown (e) {
       if (e.altKey) {
+        this.$store.dispatch('unselectAll', this.graph)
         this.$store.dispatch('addGraph', this.graph)
           .then((newGraph) => {
+            this.$store.dispatch('selectGraph', this.graph)
             this.$store.dispatch('startDrag', {
               event: e,
               graph: newGraph

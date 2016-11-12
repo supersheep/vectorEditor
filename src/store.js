@@ -11,6 +11,7 @@ export default new Vuex.Store({
     shiftKey: false,
     commandKey: false,
     paperPosition: null,
+    currentInput: null,
     moving: false,
     graphs: [{
       id: uuid.v4(),
@@ -66,6 +67,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_CURRENT_INPUT (state, input) {
+      state.currentInput = input
+    },
     DELETE_SELECTED (state) {
       state.graphs = state.graphs.filter((g) => !g.selected)
     },
@@ -125,6 +129,15 @@ export default new Vuex.Store({
         x: position.x - state.paperPosition.x - graph.startOffset.x,
         y: position.y - state.paperPosition.y - graph.startOffset.y
       }
+    },
+    SELECT_BY_TYPE (state, type) {
+      state.graphs.forEach((g) => {
+        if (g.type === type) {
+          g.selected = true
+        } else {
+          g.selected = false
+        }
+      })
     },
     ADD_GRAPH (state, graph) {
       state.graphs.push(graph)
@@ -198,8 +211,16 @@ export default new Vuex.Store({
     releaseShiftKey ({ commit }) {
       commit('RELEASE_SHIFT_KEY')
     },
-    deleteSelected ({ commit }) {
-      commit('DELETE_SELECTED')
+    selectSameType ({ commit }, graph) {
+      commit('SELECT_BY_TYPE', graph.type)
+    },
+    deleteSelected ({ commit, state }) {
+      if (!state.currentInput) {
+        commit('DELETE_SELECTED')
+      }
+    },
+    setCurrentInput ({ commit }, input) {
+      commit('SET_CURRENT_INPUT', input)
     }
   }
 })
