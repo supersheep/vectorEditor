@@ -29,7 +29,6 @@ export default {
       this.$store.dispatch('setCurrentTool', 'polygon')
     },
     addImage (url) {
-      console.log('add Image')
       this.$store.dispatch('addGraph', {
         type: 'image',
         data: {
@@ -48,5 +47,8 @@ export default {
   width: 100px;
   height: 200px;
   float: left;
+  .item {
+    cursor: pointer;
+  }
 }
 </style>

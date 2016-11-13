@@ -1,6 +1,7 @@
 <template lang="jade">
 .paper(
-    @click='paperClick',
+    @click='click',
+    @mousedown='mousedown',
     @mousemove='mousemove',
     @mouseup='mouseup')
   graph(v-for='graph in graphs', :graph='graph')
@@ -37,6 +38,17 @@ export default {
       if (e.key === 'Backspace') {
         dispatch('deleteSelected')
       }
+      if (e.key === 'v') {
+        dispatch('setCurrentTool', 'select')
+      }
+
+      if (e.key === 'o') {
+        dispatch('setCurrentTool', 'circle')
+      }
+
+      if (e.key === 'r') {
+        dispatch('setCurrentTool', 'rect')
+      }
     })
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Shift') {
@@ -57,12 +69,11 @@ export default {
       let tool = this.$store.state.currentTool
       let toolConfig = actions[tool]
       let handler = toolConfig && toolConfig[event]
-      console.log('handler', toolConfig)
       if (handler) {
         handler.bind(this)(e, this.$store)
       }
     },
-    paperClick (e) {
+    click (e) {
       this.actFor('click', e)
     },
     mousedown (e) {

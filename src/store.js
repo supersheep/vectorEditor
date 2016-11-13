@@ -12,7 +12,7 @@ export default new Vuex.Store({
     commandKey: false,
     paperPosition: null,
     currentInput: null,
-    currentTool: 'select',
+    currentTool: 'circle',
     moving: false,
     graphs: [{
       id: uuid.v4(),
@@ -68,8 +68,16 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_CURRENT_TOOL (state, tool) {
+      state.currentTool = tool
+    },
     SET_CURRENT_INPUT (state, input) {
       state.currentInput = input
+    },
+    RESIZE_CIRCLE (state, data) {
+      if (data.radius > 0) {
+        data.circle.data.radius = data.radius
+      }
     },
     DELETE_SELECTED (state) {
       state.graphs = state.graphs.filter((g) => !g.selected)
@@ -178,6 +186,10 @@ export default new Vuex.Store({
     unselectAll ({ commit }) {
       commit('UNSELECT_ALL')
     },
+    /* circle */
+    resizeDrawCircle ({ commit }, data) {
+      commit('RESIZE_CIRCLE', data)
+    },
     /* move */
     setMoving ({ commit }, moving) {
       commit('SET_MOVING', moving)
@@ -194,6 +206,9 @@ export default new Vuex.Store({
     addGraph ({ commit }, graph) {
       let newGraph = _.clone(graph)
       newGraph.id = uuid.v4()
+      newGraph.selected = false
+      newGraph.dragging = false
+
       commit('ADD_GRAPH', newGraph)
       return new window.Promise((resolve) => {
         resolve(newGraph)
