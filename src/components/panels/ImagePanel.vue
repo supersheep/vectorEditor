@@ -9,7 +9,12 @@
 </template>
 
 <script>
+import ClassInput from './ClassInput'
+
 export default {
+  components: {
+    ClassInput
+  },
   props: {
     graph: Object
   }

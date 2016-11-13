@@ -40,16 +40,17 @@ export default {
       if (e.key === 'Backspace') {
         dispatch('deleteSelected')
       }
-      if (e.key === 'v') {
-        dispatch('setCurrentTool', 'select')
+
+      let quickKeys = {
+        v: 'select',
+        c: 'circle',
+        r: 'rect',
+        p: 'polygon'
       }
 
-      if (e.key === 'c') {
-        dispatch('setCurrentTool', 'circle')
-      }
-
-      if (e.key === 'r') {
-        dispatch('setCurrentTool', 'rect')
+      let toolByQuickKey = quickKeys[e.key]
+      if (toolByQuickKey) {
+        dispatch('setCurrentTool', toolByQuickKey)
       }
     })
     window.addEventListener('keyup', (e) => {

@@ -12,6 +12,7 @@
 <script>
 import ImageGraph from './graphs/ImageGraph'
 import CircleGraph from './graphs/CircleGraph'
+import PolygonGraph from './graphs/PolygonGraph'
 import RectGraph from './graphs/RectGraph'
 
 export default {
@@ -21,7 +22,8 @@ export default {
   components: {
     ImageGraph,
     CircleGraph,
-    RectGraph
+    RectGraph,
+    PolygonGraph
   },
   methods: {
     selectSameType () {
@@ -32,7 +34,7 @@ export default {
         this.$store.dispatch('unselectAll', this.graph)
         this.$store.dispatch('addGraph', this.graph)
           .then((newGraph) => {
-            this.$store.dispatch('selectGraph', this.graph)
+            this.$store.dispatch('selectGraph', newGraph)
             this.$store.dispatch('startDrag', {
               event: e,
               graph: newGraph

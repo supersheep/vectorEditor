@@ -1,9 +1,6 @@
 <template lang="jade">
-  .circle-panel
+  .polygon-panel
     class-input(v-model='graph.data.type')
-    .row
-      .label radius
-      input.input(type='range',v-model='graph.data.radius')
 </template>
 
 <script>
@@ -20,5 +17,5 @@ export default {
 </script>
 
 <style lang="less">
-.circle-panel{}
+.polygon-panel{}
 </style>

@@ -12,7 +12,7 @@ export default new Vuex.Store({
     commandKey: false,
     paperPosition: null,
     currentInput: null,
-    currentTool: 'rect',
+    currentTool: 'polygon',
     moving: false,
     graphs: [{
       id: uuid.v4(),
@@ -35,6 +35,24 @@ export default new Vuex.Store({
         opacity: 0.6,
         fillColor: 'rgb(93, 235, 120)',
         radius: 30
+      },
+      selected: false,
+      dragging: false,
+      position: {
+        x: 50,
+        y: 50
+      }
+    }, {
+      id: uuid.v4(),
+      type: 'polygon',
+      data: {
+        fillColor: 'rgb(235, 93, 174)',
+        points: [
+          {x: 0, y: 0},
+          {x: 10, y: 150},
+          {x: 300, y: 200},
+          {x: 150, y: 10}
+        ]
       },
       selected: false,
       dragging: false,
@@ -214,7 +232,7 @@ export default new Vuex.Store({
         })
     },
     addGraph ({ commit }, graph) {
-      let newGraph = _.clone(graph)
+      let newGraph = _.cloneDeep(graph)
       newGraph.id = uuid.v4()
       newGraph.selected = false
       newGraph.dragging = false

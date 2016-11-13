@@ -3,7 +3,6 @@ export default {
     dispatch('stopDragAll')
   },
   click (e, { dispatch }) {
-    console.log('yoyoyoo')
     if (e.target === this.$el) {
       dispatch('unselectAll')
     }
