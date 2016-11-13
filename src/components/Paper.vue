@@ -12,12 +12,14 @@ import Graph from './Graph'
 
 import CircleTool from './tools/Circle'
 import RectTool from './tools/Rect'
+import PolygonTool from './tools/Polygon'
 import SelectTool from './tools/Select'
 
 let actions = {
   circle: CircleTool,
   select: SelectTool,
-  rect: RectTool
+  rect: RectTool,
+  polygon: PolygonTool
 }
 
 export default {

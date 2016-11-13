@@ -1,6 +1,13 @@
 <template lang="jade">
   svg.polygon-graph(:width='width',:height='height',:style='style')
-    polygon(:points="points",:style='polygonStyle')
+    line(v-show='points.length == 2',
+      stroke-width='2',
+      stroke='black',
+      :x1='points[0].x',
+      :y1='points[0].y',
+      :x2='points[1].x',
+      :y2='points[1].y')
+    polygon(v-show='points.length > 2',:points="polygonPoints",:style='polygonStyle')*/
 </template>
 
 <script>
@@ -9,6 +16,11 @@ export default {
   props: props,
   computed: {
     points () {
+      console.log('points', this.data.points)
+      return this.data.points
+    },
+    polygonPoints () {
+      console.log
       return this.data.points.map((p) => [p.x, p.y].join(',')).join(' ')
     },
     width () {
@@ -36,5 +48,6 @@ export default {
 <style lang="less">
 .polygon-graph{
   position: absolute;
+  overflow: visible;
 }
 </style>
