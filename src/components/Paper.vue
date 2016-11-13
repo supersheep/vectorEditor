@@ -11,11 +11,13 @@
 import Graph from './Graph'
 
 import CircleTool from './tools/Circle'
+import RectTool from './tools/Rect'
 import SelectTool from './tools/Select'
 
 let actions = {
   circle: CircleTool,
-  select: SelectTool
+  select: SelectTool,
+  rect: RectTool
 }
 
 export default {
@@ -42,7 +44,7 @@ export default {
         dispatch('setCurrentTool', 'select')
       }
 
-      if (e.key === 'o') {
+      if (e.key === 'c') {
         dispatch('setCurrentTool', 'circle')
       }
 

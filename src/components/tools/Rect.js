@@ -1,7 +1,7 @@
 var mousedown = false
 var resizing = false
 var startPoint = null
-var circle = null
+var rect = null
 export default {
   mousedown (e, { dispatch }) {
     mousedown = true
@@ -14,23 +14,27 @@ export default {
     if (mousedown) {
       if (!resizing) {
         dispatch('addGraph', {
-          type: 'circle',
+          type: 'rect',
           data: {
-            radius: e.clientY - startPoint.y
+            width: e.clientX - startPoint.x,
+            height: e.clientY - startPoint.y
           },
           position: {
             x: startPoint.x - state.paperPosition.x,
             y: startPoint.y - state.paperPosition.y
           }
         }).then((graph) => {
-          circle = graph
+          rect = graph
         })
         resizing = true
       } else {
-        if (circle) {
-          dispatch('resizeDrawCircle', {
-            circle: circle,
-            radius: e.clientY - startPoint.y
+        if (rect) {
+          dispatch('resizeDrawRect', {
+            rect: rect,
+            size: {
+              width: e.clientX - startPoint.x,
+              height: e.clientY - startPoint.y
+            }
           })
         }
       }
@@ -38,7 +42,7 @@ export default {
   },
   mouseup (e, { dispatch }) {
     if (mousedown) {
-      circle = null
+      rect = null
       startPoint = null
       resizing = false
       mousedown = false

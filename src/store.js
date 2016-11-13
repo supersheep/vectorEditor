@@ -12,7 +12,7 @@ export default new Vuex.Store({
     commandKey: false,
     paperPosition: null,
     currentInput: null,
-    currentTool: 'circle',
+    currentTool: 'rect',
     moving: false,
     graphs: [{
       id: uuid.v4(),
@@ -77,6 +77,13 @@ export default new Vuex.Store({
     RESIZE_CIRCLE (state, data) {
       if (data.radius > 0) {
         data.circle.data.radius = data.radius
+      }
+    },
+    RESIZE_DRAW_RECT (state, data) {
+      let { width, height } = data.size
+      if (width > 0 && height > 0) {
+        data.rect.data.width = width
+        data.rect.data.height = height
       }
     },
     DELETE_SELECTED (state) {
@@ -189,6 +196,9 @@ export default new Vuex.Store({
     /* circle */
     resizeDrawCircle ({ commit }, data) {
       commit('RESIZE_CIRCLE', data)
+    },
+    resizeDrawRect ({ commit }, data) {
+      commit('RESIZE_DRAW_RECT', data)
     },
     /* move */
     setMoving ({ commit }, moving) {

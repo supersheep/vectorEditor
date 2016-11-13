@@ -4,9 +4,11 @@
 改变大小
 绘制（
   多边形 (startDrawPolygon, addPointForPolygon, finishDrawPolygon)，
-  圆（startDrawCircle, resizeCircle, finishResizeCircle)
+  圆（startDrawCircle, resizeCircle, finishResizeCircle) done
   方 (startDrawRect, startResizeRect, resizeRect, finishResizeRect)，
   文字）
+
+
 
 同一class改变背景色（setBackgroundColorForGraphs）
 根据class生成区域 (generateLabelCard)
