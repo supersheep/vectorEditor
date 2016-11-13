@@ -1,9 +1,11 @@
 <template lang="jade">
 .toolbar
+  .item(@click='startSelect') 选择
   .item 添加图片
     image-picker(@change='addImage')
-  .item 矩形
-  .item 圆
+  .item(@click='startDrawRect') 矩形
+  .item(@click='startDrawCircle') 圆
+  .item(@click='startDrawPolygon') 多边形
 </template>
 
 <script>
@@ -14,6 +16,18 @@ export default {
     ImagePicker
   },
   methods: {
+    startSelect () {
+      this.$store.dispatch('setCurrentTool', 'select')
+    },
+    startDrawCircle () {
+      this.$store.dispatch('setCurrentTool', 'circle')
+    },
+    startDrawRect () {
+      this.$store.dispatch('setCurrentTool', 'rect')
+    },
+    startDrawPolygon () {
+      this.$store.dispatch('setCurrentTool', 'polygon')
+    },
     addImage (url) {
       console.log('add Image')
       this.$store.dispatch('addGraph', {

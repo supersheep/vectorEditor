@@ -8,6 +8,15 @@
 
 <script>
 import Graph from './Graph'
+
+import CircleTool from './tools/Circle'
+import SelectTool from './tools/Select'
+
+let actions = {
+  circle: CircleTool,
+  select: SelectTool
+}
+
 export default {
   components: {
     Graph
@@ -44,31 +53,26 @@ export default {
     }
   },
   methods: {
-    paperClick (e) {
-      if (e.target === this.$el) {
-        this.$store.dispatch('unselectAll')
+    actFor (event, e) {
+      let tool = this.$store.state.currentTool
+      let toolConfig = actions[tool]
+      let handler = toolConfig && toolConfig[event]
+      console.log('handler', toolConfig)
+      if (handler) {
+        handler.bind(this)(e, this.$store)
       }
+    },
+    paperClick (e) {
+      this.actFor('click', e)
+    },
+    mousedown (e) {
+      this.actFor('mousedown', e)
     },
     mousemove (e) {
-      let { draggingGraphs, selectedGraphs } = this.$store.getters
-      if (draggingGraphs.length) {
-        if (selectedGraphs.length > draggingGraphs.length) {
-          selectedGraphs.forEach((g) => {
-            this.$store.dispatch('startDrag', {
-              graph: g,
-              event: e
-            })
-          })
-        } else {
-          this.$store.dispatch('moveDraggingGraphs', {
-            x: e.clientX,
-            y: e.clientY
-          })
-        }
-      }
+      this.actFor('mousemove', e)
     },
-    mouseup () {
-      this.$store.dispatch('stopDragAll')
+    mouseup (e) {
+      this.actFor('mouseup', e)
     }
   }
 }
@@ -82,5 +86,6 @@ export default {
   background-color: #fff;
   float: left;
   position: relative;
+  user-select: none;
 }
 </style>

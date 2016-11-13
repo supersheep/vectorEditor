@@ -12,6 +12,7 @@ export default new Vuex.Store({
     commandKey: false,
     paperPosition: null,
     currentInput: null,
+    currentTool: 'select',
     moving: false,
     graphs: [{
       id: uuid.v4(),
@@ -211,6 +212,11 @@ export default new Vuex.Store({
     releaseShiftKey ({ commit }) {
       commit('RELEASE_SHIFT_KEY')
     },
+    /* polygon */
+    setCurrentTool ({ commit }, tool) {
+      commit('SET_CURRENT_TOOL', tool)
+    },
+    /* select */
     selectSameType ({ commit }, graph) {
       if (graph.data.class) {
         commit('SELECT_BY_TYPE', graph.data.class)
@@ -221,6 +227,7 @@ export default new Vuex.Store({
         commit('DELETE_SELECTED')
       }
     },
+    /* pannel */
     setCurrentInput ({ commit }, input) {
       commit('SET_CURRENT_INPUT', input)
     }
